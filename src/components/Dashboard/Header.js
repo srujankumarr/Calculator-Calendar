@@ -50,7 +50,7 @@ export default function Header() {
                     <NotificationPopUp />
 
                     <IconButton>
-                        <img src={AvatarIcon} style={{
+                        <img src={AvatarIcon} alt='Logo of the User' style={{
                             width: 40,
                             borderRadius: 25
                         }} />

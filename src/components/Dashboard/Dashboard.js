@@ -1,5 +1,5 @@
 import CssBaseline from '@mui/material/CssBaseline';
-import { Toolbar, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import SideNavigation from './SideNavigation';
 
 import { Outlet } from 'react-router-dom';

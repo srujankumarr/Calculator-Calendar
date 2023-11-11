@@ -3,12 +3,11 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import NotificationIcon from '../../images/notificationicon.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { dashboardActions } from '../../store/store';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { Box, Divider, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 const notifications = [{ message: `Srujan has updated his details`, time: '  5hrs ago' },
 {
     message: 'You have a new Task due on Nov 20', time: '  9hrs ago'
