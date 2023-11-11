@@ -11,7 +11,7 @@ function App() {
       path: '/', element: <Signup />
     },
     {
-      path: '/dashboard', element: <Dashboard />, children: [
+      path: 'https://cgpacalculator-calendar.netlify.app/dashboard', element: <Dashboard />, children: [
         {
           path: 'sgpa-calculator', element: <SGPACalculator />
         },
