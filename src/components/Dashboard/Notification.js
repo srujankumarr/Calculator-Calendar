@@ -43,7 +43,7 @@ export default function NotificationPopUp() {
                         <ListItem sx={{ width: 220 }} disableGutters key={data.message}>
                             <ListItemButton onClick={handleClose}>
                                 <ListItemAvatar>
-                                    <img src={NotificationIcon} />
+                                    <img src={NotificationIcon} alt='Notification Icon' />
                                 </ListItemAvatar>
                                 <Box>
                                     <Typography sx={{ fontSize: 14 }} variant='p'>{data.message}</Typography>
