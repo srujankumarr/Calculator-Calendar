@@ -4,9 +4,9 @@ const calSlice = createSlice({
     name: 'cal',
     initialState: {
         sgpaId: 21,
-        sgpaData: localStorage.getItem('SgpaData') ? JSON.parse(localStorage.getItem('SgpaData')) : dataSgpa,
+        sgpaData: localStorage.getItem('SgpaData') !== '[]' ? JSON.parse(localStorage.getItem('SgpaData')) : dataSgpa,
         cgpaId: 21,
-        cgpaData: localStorage.getItem('CgpaData') ? JSON.parse(localStorage.getItem('CgpaData')) : dataCgpa
+        cgpaData: localStorage.getItem('CgpaData') !== '[]' ? JSON.parse(localStorage.getItem('CgpaData')) : dataCgpa
     }, reducers: {
         addSgpaData: (state, action) => {
             action.payload.id = state.sgpaId + 1
