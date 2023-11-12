@@ -12,7 +12,7 @@ function App() {
       path: '/', element: <Signup />
     },
     {
-      path: 'https://cgpacalculator-calendar.netlify.app/dashboard', element: <Dashboard />, errorElement: <Error />,
+      path: '/dashboard', element: <Dashboard />, errorElement: <Error />,
       children: [
         {
           path: 'sgpa-calculator', element: <SGPACalculator />
