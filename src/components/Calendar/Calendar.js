@@ -8,7 +8,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
-import { Box, Typography, MenuItem, Switch, FormControlLabel } from '@mui/material';
+import { Box, } from '@mui/material';
 import './Calendar.css';
 import { loadEventsFromStorage, saveEventsToStorage } from './util';
 import Legend from './Legend';
