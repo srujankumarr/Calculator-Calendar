@@ -43,10 +43,10 @@ export default function SideNavigation() {
                 </Box>
 
                 <List sx={{ margin: '0 20px' }} >
-                    <DashboardItem curPath={curPath} name='Dashboard' icon={<HomeIcon />} link='/dashboard' />
+                    {/* <DashboardItem curPath={curPath} name='Dashboard' icon={<HomeIcon />} link='/dashboard' /> */}
+                    <DashboardItem curPath={curPath} name='Calendar' icon={<CalendarMonthIcon />} link='/dashboard/calendar' />
                     <DashboardItem curPath={curPath} name='SGPA Calculator' icon={<CalculateIcon />} link='/dashboard/sgpa-calculator' />
                     <DashboardItem curPath={curPath} name='CGPA Calculator' icon={<CalculateIcon />} link='/dashboard/cgpa-calculator' />
-                    <DashboardItem curPath={curPath} name='Calendar' icon={<CalendarMonthIcon />} link='/dashboard/calendar' />
                     <DashboardItem curPath={curPath} name='History' icon={<History />} link='/dashboard/history' />
                     <DashboardItem curPath={curPath} name='Logout' icon={<LogoutIcon />} link='/' />
                 </List>
