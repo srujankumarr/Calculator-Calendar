@@ -11,6 +11,7 @@ export const eventContent = (eventInfo, handleEventClick) => {
                 color: styles.color,
                 backgroundColor: styles.backgroundColor,
                 padding: 1,
+                width: '100%',
                 cursor: 'pointer',
                 overflow: 'hidden',
                 fontFamily: 'Roboto',

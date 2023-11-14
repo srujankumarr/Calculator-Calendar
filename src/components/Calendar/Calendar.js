@@ -9,7 +9,6 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import { Box, } from '@mui/material';
-import './Calendar.css';
 import { loadEventsFromStorage, saveEventsToStorage } from './util';
 import Legend from './Legend';
 import { eventContent } from './EventContent';
