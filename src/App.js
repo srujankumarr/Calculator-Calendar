@@ -23,7 +23,8 @@ function App() {
         },
         {
           path: 'calendar', element: <Calendar />
-        }
+        },
+
       ]
     },
 

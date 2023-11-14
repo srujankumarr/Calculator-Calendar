@@ -3,7 +3,7 @@ import axios from "axios";
 
 const CalendarComponent = () => {
     const [holidays, setHolidays] = useState([]);
-    const API_KEY = "OooNSRMeTpKy9vk5SrHkxY8kSvEOdGe6"; // Replace with your Calendarific API key
+    const API_KEY = "OooNSRMeTpKy9vk5SrHkxY8kSvEOdGe6";
 
     useEffect(() => {
         const api = axios.create({
@@ -61,3 +61,12 @@ const CalendarComponent = () => {
 };
 
 export default CalendarComponent;
+
+
+
+
+
+
+
+
+

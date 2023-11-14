@@ -5,10 +5,13 @@ import { calActions } from "../../store/store";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getRandomImage } from "../../store/data";
+
+
+
 export default function SGPACalculator() {
     const dispatch = useDispatch()
     const [sgpa, setSgpa] = useState("")
-    const [subIds, setSubIds] = useState([]);
+    const [subIds, setSubIds] = useState([1]);
     const stName = useRef();
     const stId = useRef();
     const stSemNo = useRef()
@@ -86,7 +89,11 @@ export default function SGPACalculator() {
                             name="st-name"
                             variant="outlined"
                             required
+                            size="small"
                             sx={{ marginRight: 5 }}
+                            InputLabelProps={{
+                                style: { fontSize: '14px' }
+                            }}
                         />
                         <TextField
                             inputRef={stId}
@@ -97,6 +104,10 @@ export default function SGPACalculator() {
                             variant="outlined"
                             required
                             sx={{ marginRight: 5 }}
+                            size="small"
+                            InputLabelProps={{
+                                style: { fontSize: '14px' }
+                            }}
                         />
                         <TextField
                             inputRef={stSemNo}
@@ -108,20 +119,18 @@ export default function SGPACalculator() {
                             required
                             sx={{ marginRight: 5 }}
                             type="number"
+                            size="small"
                             inputProps={{ min: 1, max: 8 }}
+                            InputLabelProps={{
+                                style: { fontSize: '14px' }
+                            }}
                         />
+
                         <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            sx={{ height: 50, marginTop: 2, width: '100%', padding: 3 }}
-                        >
-                            Calculate SGPA
-                        </Button>
-                        <Button
+                            size="small"
                             variant="contained"
                             onClick={addSubjectHandler}
-                            sx={{ marginLeft: 5, height: 50, marginTop: 2 }}
+                            sx={{ marginLeft: 4, marginTop: 2, height: '40px', width: '30px' }}
                         >
                             +
                         </Button>
@@ -148,6 +157,9 @@ export default function SGPACalculator() {
                                         sx={{ margin: 2 }}
                                         size="small"
                                         required
+                                        InputLabelProps={{
+                                            style: { fontSize: '14px' }
+                                        }}
                                     />
                                     <TextField
                                         inputRef={(el) => (subCodeRefs.current[id - 1] = el)}
@@ -158,6 +170,9 @@ export default function SGPACalculator() {
                                         sx={{ margin: 2 }}
                                         size="small"
                                         required
+                                        InputLabelProps={{
+                                            style: { fontSize: '14px' }
+                                        }}
                                     />
                                     <TextField
                                         inputRef={(el) => (subGradeRefs.current[id - 1] = el)}
@@ -170,6 +185,9 @@ export default function SGPACalculator() {
                                         required
                                         type="number"
                                         inputProps={{ min: 4, max: 10 }}
+                                        InputLabelProps={{
+                                            style: { fontSize: '14px' }
+                                        }}
                                     />
                                     <TextField
                                         inputRef={(el) => (subCreditsRefs.current[id - 1] = el)}
@@ -182,14 +200,28 @@ export default function SGPACalculator() {
                                         required
                                         type="number"
                                         inputProps={{ min: 0, max: 4 }}
+                                        InputLabelProps={{
+                                            style: { fontSize: '14px' }
+                                        }}
                                     />
-                                    <IconButton onClick={() => deleteSubComponent(id)}>
+                                    {subIds.length > 1 && <IconButton onClick={() => deleteSubComponent(id)}>
                                         <DeleteIcon color="error" />
-                                    </IconButton>
+                                    </IconButton>}
                                 </Box>
                             </motion.div>
                         ))}
                     </AnimatePresence>
+                    <Box >
+                        <Button
+                            size="small"
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            sx={{ marginTop: 2, padding: 1, ml: 38 }}
+                        >
+                            Calculate SGPA
+                        </Button>
+                    </Box>
                     <Box mt={2}>
                         <strong>Overall SGPA: {sgpa}</strong>
                     </Box>

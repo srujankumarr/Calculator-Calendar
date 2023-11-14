@@ -8,7 +8,8 @@ const store = configureStore({
     reducer: {
         login: loginSlice.reducer,
         dashboard: dashboardSlice.reducer,
-        cal: calSlice.reducer
+        cal: calSlice.reducer,
+
     }
 })
 export const loginActions = loginSlice.actions

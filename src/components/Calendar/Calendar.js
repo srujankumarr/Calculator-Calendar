@@ -1,111 +1,248 @@
-import React, { useState } from 'react';
-import {
-    Grid,
-    Paper,
-    Typography,
-    IconButton,
-} from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import styled from '@mui/material/styles/styled';
-
-const CalendarContainer = styled('div')({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: '20px',
-});
-
-const Header = styled('div')({
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: '10px',
-});
-
-const CalendarGrid = styled(Grid)({
-    width: '100%',
-    padding: 20
-});
-
-const DayCell = styled('div')({
-    width: '100px',
-    height: '100px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    // border: '1px solid #ccc',
-});
-
-const Today = styled(DayCell)({
-    backgroundColor: 'lightblue',
-});
-
-const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+import React, { useState, useEffect } from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import { Box, Typography, MenuItem, Switch, FormControlLabel } from '@mui/material';
+import './Calendar.css';
+import { loadEventsFromStorage, saveEventsToStorage } from './util';
+import Legend from './Legend';
+import { eventContent } from './EventContent';
+import AddEventDrawer from './AddEventDrawer';
 
 const Calendar = () => {
-    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [events, setEvents] = useState(loadEventsFromStorage());
+    const [formData, setFormData] = useState({
+        eventTitle: '',
+        calendarCategory: 'Work',
+        startDate: '',
+        endDate: '',
+        allDay: false,
+    });
+    const [selectedEvent, setSelectedEvent] = useState(null);
+    const [selectedCategories, setSelectedCategories] = useState([
+        { id: 1, category: 'View All', checked: true },
+        { id: 2, category: 'Work', checked: true },
+        { id: 3, category: 'Personal', checked: true },
+        { id: 4, category: 'Holiday', checked: true },
+        { id: 5, category: 'Family', checked: true },
+        { id: 6, category: 'Other', checked: true },
+    ]);
 
-    const daysInMonth = new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth() + 1,
-        0
-    ).getDate();
-
-    const firstDay = new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth(),
-        1
-    ).getDay();
-
-    const days = [...Array(firstDay).fill(null), ...Array(daysInMonth).keys()];
-
-    const prevMonth = () => {
-        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+    const handleAddEventClick = () => {
+        handleReset();
+        setDrawerOpen(true);
+        setSelectedEvent(null);
     };
 
-    const nextMonth = () => {
-        setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+    const handleEventDelete = () => {
+        if (selectedEvent) {
+            const updatedEvents = events.filter((event) => event.title !== selectedEvent.title);
+            setEvents(updatedEvents);
+            saveEventsToStorage(updatedEvents);
+            setDrawerOpen(false);
+            setSelectedEvent(null);
+        }
     };
+
+    const handleCloseDrawer = () => {
+        setDrawerOpen(false);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleReset = () => {
+        setFormData({
+            eventTitle: '',
+            calendarCategory: 'Work',
+            startDate: '',
+            endDate: '',
+            startTime: '',
+            endTime: '',
+            allDay: false
+        });
+        setSelectedEvent(null);
+    };
+
+    const handleEventAdd = () => {
+        const newEvent = {
+            title: formData.eventTitle,
+            category: formData.calendarCategory,
+            start: new Date(formData.startDate),
+            end: new Date(formData.endDate),
+            allDay: formData.allDay
+        };
+
+        const updatedEvents = [...events, newEvent];
+        setEvents(updatedEvents);
+        saveEventsToStorage(updatedEvents);
+        setDrawerOpen(false);
+        handleReset();
+    };
+
+    const handleEventUpdate = () => {
+        if (selectedEvent) {
+            const updatedEvent = {
+                title: formData.eventTitle,
+                category: formData.calendarCategory,
+                start: new Date(formData.startDate),
+                end: new Date(formData.endDate),
+                allDay: formData.allDay
+            };
+
+            const updatedEvents = events.map((event) => (event.title === selectedEvent.title ? updatedEvent : event));
+            setEvents(updatedEvents);
+            saveEventsToStorage(updatedEvents);
+            setDrawerOpen(false);
+            setSelectedEvent(null);
+            handleReset();
+        }
+    };
+
+    const handleEventClick = (info) => {
+        setDrawerOpen(true);
+        setFormData({
+            eventTitle: info.event.title,
+            calendarCategory: info.event.extendedProps.category,
+            startDate: info.event.start.toISOString().slice(0, 16),
+            endDate: (info.event.end || info.event.start).toISOString().slice(0, 16),
+            allDay: info.event.allDay
+        });
+        setSelectedEvent(info.event);
+    };
+
+    const handleDateClick = (info) => {
+        setDrawerOpen(true);
+        handleReset();
+        const formattedStartDate = new Date(info.dateStr).toISOString().slice(0, 16);
+        const endDateTime = new Date(info.dateStr);
+        const formattedEndDate = endDateTime.toISOString().slice(0, 16);
+
+        setFormData((prevData) => ({
+            ...prevData,
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+        }));
+
+        setSelectedEvent(null);
+    };
+
+    const handleCategoryToggle = (category, bool) => {
+        if (category === 'View All') {
+            const updatedCategories = selectedCategories.map(ele => {
+                if (bool === true) {
+                    ele.checked = false
+                } else {
+                    ele.checked = true
+                }
+                return ele
+            })
+            setSelectedCategories(updatedCategories);
+        } else {
+            const updatedCategories = selectedCategories.map(ele => {
+                if (ele.category === 'View All' && bool === true) {
+                    ele.checked = false
+                }
+                if (ele.category === category) {
+                    ele.checked = !ele.checked
+                }
+                return ele
+            })
+
+            setSelectedCategories(updatedCategories);
+        }
+        const count = selectedCategories.reduce((count, ele) => (count + ele.checked), 0)
+        if (count === 5) {
+            const updatedCategories = selectedCategories.map(ele => {
+                if (ele.category === 'View All') {
+                    ele.checked = true
+                }
+                return ele
+            })
+            setSelectedCategories(updatedCategories)
+        }
+        const curEvents = loadEventsFromStorage();
+        const updatedEvents = curEvents.filter((event) => {
+            const val = selectedCategories.find(categoryEle => {
+                return categoryEle.category === event.category && categoryEle.checked === true;
+            });
+            return val !== undefined;
+        });
+        setEvents(updatedEvents);
+    };
+
+    const eventContentComponent = (eventInfo) => {
+        return eventContent(eventInfo, handleEventClick);
+    };
+
+    useEffect(() => {
+        setEvents(loadEventsFromStorage());
+    }, []);
 
     return (
-        <CalendarContainer>
-            <Header>
-                <IconButton onClick={prevMonth}>
-                    <ArrowBackIcon />
-                </IconButton>
-                <Typography variant="h5">
-                    {currentMonth.toLocaleString('default', { month: 'long' })}{' '}
-                    {currentMonth.getFullYear()}
-                </Typography>
-                <IconButton onClick={nextMonth}>
-                    <ArrowForwardIcon />
-                </IconButton>
-            </Header>
-            <Paper elevation={3}>
-                <CalendarGrid container spacing={0} columns={{ xs: 7 }}>
-                    {daysOfWeek.map((day, index) => (
-                        <Grid item key={index} xs={1}>
-                            <DayCell>
-                                <Typography variant="subtitle1">{day}</Typography>
-                            </DayCell>
-                        </Grid>
-                    ))}
-                    {days.map((day, index) => (
-                        <Grid item key={index} xs={1}>
-                            <DayCell className={`${day === null ? 'placeholder' : ''} ${day === new Date().getDate() ? Today : ''}`}>
-                                <Typography variant="h6">
-                                    {day === null ? '' : day + 1}
-                                </Typography>
-                            </DayCell>
-                        </Grid>
-                    ))}
-                </CalendarGrid>
-            </Paper>
-        </CalendarContainer>
+        <>
+            <Card sx={{ display: 'flex', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)', borderRadius: 5, py: 3, paddingRight: 3, marginBottom: 10 }}>
+                <Box sx={{ padding: 5 }}>
+                    <Button onClick={handleAddEventClick} variant="contained" sx={{ width: '100%' }}>
+                        Add Event
+                    </Button>
+                    <Legend selectedCategories={selectedCategories} handleCategoryToggle={handleCategoryToggle} />
+                </Box>
+                <Card style={{ width: '750px' }}>
+                    <CardContent>
+                        <FullCalendar
+                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+                            views={{
+                                'dayGridMonth': { buttonText: 'Month', },
+                                'timeGridWeek': { buttonText: 'Week' },
+                                'timeGridDay': { buttonText: 'Day' },
+                                'listMonth': { buttonText: 'List' }
+                            }}
+                            events={events}
+                            headerToolbar={{
+                                start: 'prev,next',
+                                center: 'title',
+                                end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
+                            }}
+                            initialView="dayGridMonth"
+                            selectable={true}
+                            editable
+                            dateClick={handleDateClick}
+                            eventClick={handleEventClick}
+                            eventContent={eventContentComponent}
+                            height="100vh"
+                            navLinks={true}
+                            dayMaxEvents={2}
+                        />
+                    </CardContent>
+                </Card>
+            </Card>
+            <Drawer anchor="right" open={drawerOpen} onClose={handleCloseDrawer}>
+                <AddEventDrawer
+                    selectedEvent={selectedEvent}
+                    handleEventDelete={handleEventDelete}
+                    handleCloseDrawer={handleCloseDrawer}
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleEventUpdate={handleEventUpdate}
+                    handleEventAdd={handleEventAdd}
+                    handleReset={handleReset}
+                />
+            </Drawer>
+        </>
     );
 };
 
 export default Calendar;
-
-
-

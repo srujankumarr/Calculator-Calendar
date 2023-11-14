@@ -12,7 +12,7 @@ export const theme = createTheme({
   palette: {
     background: {
       default: '#F9FAFB'
-    }
+    }, primary: { main: 'rgb(145, 85, 253)' }
   }
 })
 const root = ReactDOM.createRoot(document.getElementById('root'));

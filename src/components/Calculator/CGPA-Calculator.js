@@ -8,7 +8,7 @@ import { getRandomImage } from "../../store/data";
 export default function CGPACalculator() {
     const dispatch = useDispatch()
     const [cgpa, setCgpa] = useState("")
-    const [semIds, setsemIds] = useState([]);
+    const [semIds, setsemIds] = useState([1]);
     const stName = useRef();
     const stId = useRef();
     const totalCreditsRefs = useRef([]);
@@ -16,6 +16,7 @@ export default function CGPACalculator() {
     const sgpaRefs = useRef([]);
 
     const addSubjectHandler = () => {
+        if (semIds.length > 7) return
         setsemIds((prev) => [...prev, semIds.length + 1]);
     };
 
@@ -68,11 +69,14 @@ export default function CGPACalculator() {
             <Typography component="p" sx={{ fontSize: "35px", color: '#212B36', fontFamily: 'Roboto' }}>CGPA Calculator</Typography>
             <Card
                 sx={{
+
                     width: 'auto',
+                    display: 'block',
                     padding: 5,
                     borderRadius: 7,
                     boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
-                    marginTop: 5
+                    marginTop: 5,
+                    mr: 'auto', ml: 'auto'
                 }}
             >
 
@@ -92,6 +96,10 @@ export default function CGPACalculator() {
                             variant="outlined"
                             required
                             sx={{ marginRight: 5, }}
+                            size="small"
+                            InputLabelProps={{
+                                style: { fontSize: '14px' }
+                            }}
                         />
                         <TextField
                             inputRef={stId}
@@ -102,20 +110,18 @@ export default function CGPACalculator() {
                             variant="outlined"
                             required
                             sx={{ marginRight: 5 }}
+                            size="small"
+                            InputLabelProps={{
+                                style: { fontSize: '14px' }
+                            }}
                         />
 
+
                         <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            sx={{ height: 50, marginTop: 2, width: '100%', padding: 3 }}
-                        >
-                            Calculate CGPA
-                        </Button>
-                        <Button
+                            size="small"
                             variant="contained"
                             onClick={addSubjectHandler}
-                            sx={{ marginLeft: 5, height: 50, marginTop: 2 }}
+                            sx={{ marginLeft: 3, height: 40, marginTop: 2 }}
                         >
                             +
                         </Button>
@@ -137,7 +143,7 @@ export default function CGPACalculator() {
                                         alignItems="center"
                                         justifyContent="center"
                                     >
-                                        <Typography variant="h5" sx={{ fontFamily: 'Nunito Sans, sans-serif', marginRight: 2 }}>{`Semester${id}`}</Typography>
+                                        <Typography variant="h6" sx={{ fontFamily: 'Nunito Sans, sans-serif', marginRight: 2 }}>{`Semester${id}`}</Typography>
                                         <TextField
                                             inputRef={(el) => (totalCreditsRefs.current[id - 1] = el)}
                                             label="Total Credits"
@@ -146,6 +152,9 @@ export default function CGPACalculator() {
                                             margin="normal"
                                             sx={{ margin: 2 }}
                                             size="small"
+                                            InputLabelProps={{
+                                                style: { fontSize: '14px' }
+                                            }}
                                             required
                                         />
                                         <TextField
@@ -156,6 +165,9 @@ export default function CGPACalculator() {
                                             margin="normal"
                                             sx={{ margin: 2 }}
                                             size="small"
+                                            InputLabelProps={{
+                                                style: { fontSize: '14px' }
+                                            }}
                                             required
                                             type="number"
                                         />
@@ -167,9 +179,12 @@ export default function CGPACalculator() {
                                             margin="normal"
                                             sx={{ margin: 2 }}
                                             size="small"
+                                            InputLabelProps={{
+                                                style: { fontSize: '14px' }
+                                            }}
                                             required
                                         />
-                                        {(id === semIds.length) ? (
+                                        {(id === semIds.length && id !== 1) ? (
                                             <IconButton onClick={deleteLastSem}>
                                                 <DeleteIcon color="error" />
                                             </IconButton>
@@ -181,6 +196,15 @@ export default function CGPACalculator() {
                             );
                         })}
                     </AnimatePresence>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        sx={{ marginTop: 2, padding: 1, ml: 40 }}
+                    >
+                        Calculate CGPA
+                    </Button>
                     <Box mt={2}>
                         <strong>Overall CGPA: {cgpa}</strong>
                     </Box>
