@@ -1,4 +1,4 @@
-import { Box, Button, Card, TextField, Typography, IconButton, Snackbar } from "@mui/material";
+import { Box, Button, Card, TextField, Typography, IconButton } from "@mui/material";
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { calActions } from "../../store/store";
@@ -17,7 +17,6 @@ export default function CGPACalculator() {
     const totalCreditsRefs = useRef([]);
     const creditsAwardedRefs = useRef([]);
     const sgpaRefs = useRef([]);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
 
     const addSubjectHandler = () => {
@@ -27,10 +26,6 @@ export default function CGPACalculator() {
 
     const calculateCGPA = (event) => {
         event.preventDefault();
-        if (!stName.current.value || !stId.current.value) {
-            setSnackbarOpen(true);
-            return;
-        }
         const semsData = semIds.map((id) => ({
             semNo: id,
             totalCredits: Number(totalCreditsRefs.current[id - 1].value),
@@ -81,9 +76,6 @@ export default function CGPACalculator() {
         setsemIds(semIds.slice(0, semIds.length - 1));
     };
 
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
-    };
 
     return (
         <motion.div
@@ -99,7 +91,6 @@ export default function CGPACalculator() {
                     borderRadius: 7,
                     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
                     marginTop: 14,
-                    ml: 10
                 }}
             >
                 <Typography component="p" sx={{ fontSize: "35px", color: '#212B36', fontFamily: 'Roboto' }}>CGPA Calculator</Typography>
@@ -241,14 +232,6 @@ export default function CGPACalculator() {
                         )}
                     </Box>
                 </form>
-
-                {/* Snackbar for empty fields */}
-                <Snackbar
-                    open={snackbarOpen}
-                    autoHideDuration={6000}
-                    onClose={handleSnackbarClose}
-                    message="Fill the required fields."
-                />
             </Card>
         </motion.div>
     );
