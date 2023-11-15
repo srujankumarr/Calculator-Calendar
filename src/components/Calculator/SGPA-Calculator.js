@@ -1,5 +1,5 @@
-import { Box, Button, Card, IconButton, TextField, Typography, Snackbar } from "@mui/material";
-import { useState, useRef, useEffect } from "react";
+import { Box, Button, Card, IconButton, TextField, Typography } from "@mui/material";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { calActions } from "../../store/store";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -19,7 +19,6 @@ export default function SGPACalculator() {
     const subCodeRefs = useRef([]);
     const subGradeRefs = useRef([]);
     const subCreditsRefs = useRef([]);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
 
     const addSubjectHandler = () => {
@@ -33,13 +32,6 @@ export default function SGPACalculator() {
 
     const calculateSGPA = (event) => {
         event.preventDefault();
-
-        // Check if required fields are filled
-        if (!stName.current.value || !stId.current.value || !stSemNo.current.value) {
-            setSnackbarOpen(true);
-            return;
-        }
-
         const subjects = subIds.map((id) => ({
             name: subNameRefs.current[id - 1].value,
             code: subCodeRefs.current[id - 1].value,
@@ -91,9 +83,6 @@ export default function SGPACalculator() {
         dispatch(calActions.addSgpaData(updatedData));
     };
 
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
-    };
 
     return (
         <motion.div
