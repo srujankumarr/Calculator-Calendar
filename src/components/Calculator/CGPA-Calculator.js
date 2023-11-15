@@ -1,4 +1,4 @@
-import { Box, Button, Card, TextField, Typography, IconButton } from "@mui/material";
+import { Box, Button, Card, TextField, Typography, IconButton, Snackbar } from "@mui/material";
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { calActions } from "../../store/store";
@@ -7,61 +7,82 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getRandomImage } from "../../store/data";
 import AddIcon from '@mui/icons-material/Add';
 
-
-
 export default function CGPACalculator() {
     const dispatch = useDispatch()
-    const [cgpa, setCgpa] = useState("")
+    const [cgpa, setCgpa] = useState("");
+    const [displayedCgpa, setDisplayedCgpa] = useState("0.00"); // Newly added state
     const [semIds, setsemIds] = useState([1]);
     const stName = useRef();
     const stId = useRef();
     const totalCreditsRefs = useRef([]);
     const creditsAwardedRefs = useRef([]);
     const sgpaRefs = useRef([]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     const addSubjectHandler = () => {
-        if (semIds.length > 7) return
+        if (semIds.length > 7) return;
         setsemIds((prev) => [...prev, semIds.length + 1]);
     };
 
     const calculateCGPA = (event) => {
         event.preventDefault();
+        if (!stName.current.value || !stId.current.value) {
+            setSnackbarOpen(true);
+            return;
+        }
         const semsData = semIds.map((id) => ({
             semNo: id,
             totalCredits: Number(totalCreditsRefs.current[id - 1].value),
             creditsAwarded: Number(creditsAwardedRefs.current[id - 1].value),
             sgpa: Number(sgpaRefs.current[id - 1].value),
         }));
-
         if (semsData.length === 0) {
             return;
         }
-
         const data = {
             name: stName.current.value,
             rollNo: stId.current.value,
             semesters: semsData,
             logo: getRandomImage()
         };
-
         const totalCredits = semsData.reduce((credits, sem) => {
             return credits + sem.totalCredits;
         }, 0);
-
         const gpa = semsData.reduce((val, sem) => {
             return val + sem.creditsAwarded * sem.sgpa;
         }, 0);
 
-        const cgpa = (gpa / totalCredits).toFixed(2);
+        const calculatedCgpa = (gpa / totalCredits).toFixed(2);
 
-        setCgpa(cgpa);
+        setIsAnimating(true);
+        const step = 0.1;
+        let currentCgpa = 0.0;
 
-        const updatedData = { ...data, gradePoints: cgpa, type: "CGPA" };
-        dispatch(calActions.addCgpaData(updatedData));
+        const interval = setInterval(() => {
+            currentCgpa += step;
+            setDisplayedCgpa(currentCgpa.toFixed(2));
+
+            if (currentCgpa >= calculatedCgpa) {
+                clearInterval(interval);
+
+                setTimeout(() => {
+                    setIsAnimating(false);
+                    setCgpa(calculatedCgpa);
+                }, 0.1);
+            }
+        }, 1);
+
+        const updatedData = { ...data, gradePoints: calculatedCgpa, type: "CGPA" };
+        dispatch(calActions.addCgpaData(updatedData))
     };
 
     const deleteLastSem = () => {
         setsemIds(semIds.slice(0, semIds.length - 1));
+    };
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
     };
 
     return (
@@ -72,7 +93,6 @@ export default function CGPACalculator() {
         >
             <Card
                 sx={{
-
                     width: 'auto',
                     display: 'block',
                     padding: 5,
@@ -208,9 +228,27 @@ export default function CGPACalculator() {
                         Calculate CGPA
                     </Button>
                     <Box mt={2}>
-                        <strong style={{ fontSize: '20px' }}> Overall CGPA: {cgpa}</strong>
+                        {isAnimating ? (
+                            <motion.strong
+                                style={{ fontSize: '20px' }}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                            >
+                                Overall CGPA: {displayedCgpa}
+                            </motion.strong>
+                        ) : (
+                            <strong style={{ fontSize: '20px' }}> Overall CGPA: {cgpa}</strong>
+                        )}
                     </Box>
                 </form>
+
+                {/* Snackbar for empty fields */}
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    message="Fill the required fields."
+                />
             </Card>
         </motion.div>
     );

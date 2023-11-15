@@ -1,5 +1,5 @@
-import { Box, Button, Card, IconButton, TextField, Typography } from "@mui/material";
-import { useState, useRef } from "react";
+import { Box, Button, Card, IconButton, TextField, Typography, Snackbar } from "@mui/material";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { calActions } from "../../store/store";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,10 +7,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { getRandomImage } from "../../store/data";
 import AddIcon from '@mui/icons-material/Add';
 
-
 export default function SGPACalculator() {
     const dispatch = useDispatch()
-    const [sgpa, setSgpa] = useState("")
+    const [sgpa, setSgpa] = useState("");
+    const [displayedSgpa, setDisplayedSgpa] = useState("0.00"); // Newly added state
     const [subIds, setSubIds] = useState([1]);
     const stName = useRef();
     const stId = useRef();
@@ -19,6 +19,8 @@ export default function SGPACalculator() {
     const subCodeRefs = useRef([]);
     const subGradeRefs = useRef([]);
     const subCreditsRefs = useRef([]);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(false);
 
     const addSubjectHandler = () => {
         setSubIds((prev) => [...prev, subIds.length + 1]);
@@ -31,6 +33,13 @@ export default function SGPACalculator() {
 
     const calculateSGPA = (event) => {
         event.preventDefault();
+
+        // Check if required fields are filled
+        if (!stName.current.value || !stId.current.value || !stSemNo.current.value) {
+            setSnackbarOpen(true);
+            return;
+        }
+
         const subjects = subIds.map((id) => ({
             name: subNameRefs.current[id - 1].value,
             code: subCodeRefs.current[id - 1].value,
@@ -58,11 +67,32 @@ export default function SGPACalculator() {
             return val + sub.grade * sub.credits;
         }, 0);
 
-        const sgpa = gpa / totalCredits;
-        setSgpa(sgpa);
+        const calculatedSgpa = gpa / totalCredits;
 
-        const updatedData = { ...data, gradePoints: sgpa.toFixed(2), type: "SGPA" };
+        setIsAnimating(true);
+        const step = 0.1;
+        let currentSgpa = 0.0;
+
+        const interval = setInterval(() => {
+            currentSgpa += step;
+            setDisplayedSgpa(currentSgpa.toFixed(2));
+
+            if (currentSgpa >= calculatedSgpa) {
+                clearInterval(interval);
+
+                setTimeout(() => {
+                    setIsAnimating(false);
+                    setSgpa(calculatedSgpa.toFixed(2));
+                }, 0.1);
+            }
+        }, 1);
+
+        const updatedData = { ...data, gradePoints: calculatedSgpa.toFixed(2), type: "SGPA" };
         dispatch(calActions.addSgpaData(updatedData));
+    };
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
     };
 
     return (
@@ -224,9 +254,21 @@ export default function SGPACalculator() {
                         </Button>
                     </Box>
                     <Box mt={2}>
-                        <strong>Overall SGPA: {sgpa}</strong>
+                        {isAnimating ? (
+                            <motion.strong
+                                style={{ fontSize: '20px' }}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                            >
+                                Overall SGPA: {displayedSgpa}
+                            </motion.strong>
+                        ) : (
+                            <strong style={{ fontSize: '20px' }}>Overall SGPA: {sgpa}</strong>
+                        )}
                     </Box>
                 </form>
+
+
             </Card>
         </motion.div>
     );
