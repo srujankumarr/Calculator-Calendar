@@ -1,7 +1,6 @@
 import userIcon1 from '../../images/student7.jpg'
 import notificationIcon from '../../images/notificationicon.svg'
 import userIcon2 from '../../images/avatar-person.jpg'
-import userIcon3 from '../../images/avatarnotification.jpg'
 
 export const notifications = [
     {

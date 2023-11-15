@@ -10,7 +10,6 @@ import TableCell from '@mui/material/TableCell';
 import { Avatar, Box, IconButton } from '@mui/material';
 import { SearchOutlined } from '@mui/icons-material';
 import { TextField } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useDispatch, useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styled from '@emotion/styled';

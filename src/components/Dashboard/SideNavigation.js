@@ -1,10 +1,8 @@
 import { Drawer, List, Paper, Box, Avatar, Typography, alpha } from "@mui/material";
 import DashboardItem from "./DashboardItem";
-// import HomeIcon from '@mui/icons-material/Home';
 import History from "@mui/icons-material/History";
 import CalculateIcon from '@mui/icons-material/Calculate';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import logo from '../../images/avatar-person.jpg'

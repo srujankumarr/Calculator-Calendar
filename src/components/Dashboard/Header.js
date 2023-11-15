@@ -3,7 +3,7 @@ import Notifications from "@mui/icons-material/NotificationsNoneTwoTone";
 import AvatarIcon from '../../images/avatar-person.jpg'
 import SearchBar from './SearchBar';
 import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Badge, Box, Avatar, Popover, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography, Paper } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Badge, Box, Avatar, Popover, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, Typography } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DoneIcon from '@mui/icons-material/Done';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
