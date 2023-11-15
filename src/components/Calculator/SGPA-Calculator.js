@@ -5,7 +5,7 @@ import { calActions } from "../../store/store";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getRandomImage } from "../../store/data";
-
+import AddIcon from '@mui/icons-material/Add';
 
 
 export default function SGPACalculator() {
@@ -71,14 +71,15 @@ export default function SGPACalculator() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <Typography variant="h4" component="h1" sx={{ fontSize: "35px", color: '#212B36', fontFamily: 'Roboto' }}>SGPA Calculator</Typography>
-            <Card sx={{ padding: 5, borderRadius: 7, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)', marginTop: 5 }}>
+            <Card sx={{ padding: 5, borderRadius: 7, boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)', marginTop: 14 }}>
+                <Typography variant="h4" component="h1" sx={{ fontSize: "35px", color: '#212B36', fontFamily: 'Roboto' }}>SGPA Calculator</Typography>
 
                 <form onSubmit={calculateSGPA}>
                     <Box
                         sx={{
                             display: 'flex',
                             justifyContent: 'space-around',
+                            marginTop: 2
                         }}
                     >
                         <TextField
@@ -128,11 +129,11 @@ export default function SGPACalculator() {
 
                         <Button
                             size="small"
-                            variant="contained"
+                            variant="outlined"
                             onClick={addSubjectHandler}
-                            sx={{ marginLeft: 4, marginTop: 2, height: '40px', width: '30px' }}
+                            sx={{ marginTop: 2, height: '40px', width: '20px', border: '1px solid lightgrey' }}
                         >
-                            +
+                            <AddIcon />
                         </Button>
                     </Box>
                     <AnimatePresence>

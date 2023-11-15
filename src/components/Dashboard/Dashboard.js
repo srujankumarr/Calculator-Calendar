@@ -10,11 +10,11 @@ import Header from './Header';
 export default function Dashboard() {
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box >
             <CssBaseline />
-            <Header />
-            <SideNavigation />
-            <Box sx={{ marginLeft: 40, marginTop: 14 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Header />
+                <SideNavigation />
                 <Outlet />
             </Box>
 

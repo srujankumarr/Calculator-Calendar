@@ -59,9 +59,6 @@ const History = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <Typography variant="h4" component="div" gutterBottom>
-                    History
-                </Typography>
             </motion.div>
 
             <motion.div
@@ -72,12 +69,18 @@ const History = () => {
                 <Card
                     sx={{
                         borderRadius: 5,
-                        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
+                        boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
                         width: '70vw',
-                        my: 5,
+                        mb: 10,
+                        mt: 12,
+                        ml: 20,
+                        padding: '25px 25px 0 25px'
                     }}
                 >
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '25px 25px 0 25px' }}>
+                    <Typography variant="h4" component="div" gutterBottom>
+                        History
+                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', }}>
                         <TextField
                             label="Search"
                             variant="outlined"
@@ -93,9 +96,7 @@ const History = () => {
                             }}
                             onChange={searchHistory}
                         />
-                        <IconButton>
-                            <MoreVertIcon />
-                        </IconButton>
+
                     </Box>
 
                     <Box sx={{ padding: '25px', textAlign: 'center' }}>

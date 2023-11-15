@@ -5,6 +5,10 @@ import { calActions } from "../../store/store";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getRandomImage } from "../../store/data";
+import AddIcon from '@mui/icons-material/Add';
+
+
+
 export default function CGPACalculator() {
     const dispatch = useDispatch()
     const [cgpa, setCgpa] = useState("")
@@ -66,7 +70,6 @@ export default function CGPACalculator() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <Typography component="p" sx={{ fontSize: "35px", color: '#212B36', fontFamily: 'Roboto' }}>CGPA Calculator</Typography>
             <Card
                 sx={{
 
@@ -74,11 +77,12 @@ export default function CGPACalculator() {
                     display: 'block',
                     padding: 5,
                     borderRadius: 7,
-                    boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)',
-                    marginTop: 5,
-                    mr: 'auto', ml: 'auto'
+                    boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
+                    marginTop: 14,
+                    ml: 10
                 }}
             >
+                <Typography component="p" sx={{ fontSize: "35px", color: '#212B36', fontFamily: 'Roboto' }}>CGPA Calculator</Typography>
 
                 <form onSubmit={calculateCGPA}>
                     <Box
@@ -115,15 +119,13 @@ export default function CGPACalculator() {
                                 style: { fontSize: '14px' }
                             }}
                         />
-
-
                         <Button
                             size="small"
-                            variant="contained"
+                            variant="outlined"
                             onClick={addSubjectHandler}
-                            sx={{ marginLeft: 3, height: 40, marginTop: 2 }}
+                            sx={{ marginTop: 2, height: '40px', width: '20px', border: '1px solid lightgrey' }}
                         >
-                            +
+                            <AddIcon />
                         </Button>
                     </Box>
                     <AnimatePresence>
@@ -206,7 +208,7 @@ export default function CGPACalculator() {
                         Calculate CGPA
                     </Button>
                     <Box mt={2}>
-                        <strong>Overall CGPA: {cgpa}</strong>
+                        <strong style={{ fontSize: '20px' }}> Overall CGPA: {cgpa}</strong>
                     </Box>
                 </form>
             </Card>

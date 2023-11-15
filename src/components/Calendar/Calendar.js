@@ -83,7 +83,7 @@ const Calendar = () => {
             end: new Date(formData.endDate),
             allDay: formData.allDay
         };
-
+        console.log(newEvent);
         const updatedEvents = [...events, newEvent];
         setEvents(updatedEvents);
         saveEventsToStorage(updatedEvents);
@@ -112,15 +112,49 @@ const Calendar = () => {
 
     const handleEventClick = (info) => {
         setDrawerOpen(true);
+
+        // Format start and end dates in the required format
+        const startDate = info.event.start;
+        const endDate = info.event.end || info.event.start;
+
+        const options = { timeZone: 'Asia/Kolkata' };
+
+        const formattedStartDate = formatDate(startDate, options);
+        const formattedEndDate = formatDate(endDate, options);
+
+        // Update the form data
         setFormData({
             eventTitle: info.event.title,
             calendarCategory: info.event.extendedProps.category,
-            startDate: info.event.start.toISOString().slice(0, 16),
-            endDate: (info.event.end || info.event.start).toISOString().slice(0, 16),
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
             allDay: info.event.allDay
         });
         setSelectedEvent(info.event);
     };
+
+    const formatDate = (date, options) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hour = String(date.getHours()).padStart(2, '0');
+        const minute = String(date.getMinutes()).padStart(2, '0');
+
+        const formattedDateString = `${year}-${month}-${day}T${hour}:${minute}`;
+
+        return formattedDateString;
+    };
+
+
+
+
+
+
+
+
+
+
+
 
     const handleDateClick = (info) => {
         setDrawerOpen(true);
@@ -192,7 +226,7 @@ const Calendar = () => {
 
     return (
         <>
-            <Card sx={{ display: 'flex', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)', borderRadius: 5, py: 3, paddingRight: 3, marginBottom: 10 }}>
+            <Card sx={{ display: 'flex', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.15)', borderRadius: 5, py: 3, paddingRight: 3, marginBottom: 10, ml: 20, mt: 13 }}>
                 <Box sx={{ padding: 5 }}>
                     <Button onClick={handleAddEventClick} variant="contained" sx={{ width: '100%' }}>
                         Add Event
