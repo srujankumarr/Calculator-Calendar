@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 export default function SGPACalculator() {
     const dispatch = useDispatch()
-    const [sgpa, setSgpa] = useState("");
+    const [sgpa, setSgpa] = useState(null);
     const [displayedSgpa, setDisplayedSgpa] = useState("0.00"); // Newly added state
     const [subIds, setSubIds] = useState([1]);
     const stName = useRef();
@@ -242,17 +242,17 @@ export default function SGPACalculator() {
                             Calculate SGPA
                         </Button>
                     </Box>
-                    <Box mt={2}>
+                    <Box sx={{ padding: 2, pl: 34 }} >
                         {isAnimating ? (
                             <motion.strong
-                                style={{ fontSize: '20px' }}
+                                style={{ fontSize: '22px' }}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                             >
                                 Overall SGPA: {displayedSgpa}
                             </motion.strong>
-                        ) : (
-                            <strong style={{ fontSize: '20px' }}>Overall SGPA: {sgpa}</strong>
+                        ) : sgpa !== null && (
+                            <strong style={{ fontSize: '22px' }}>Overall SGPA: {sgpa}</strong>
                         )}
                     </Box>
                 </form>

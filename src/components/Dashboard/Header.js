@@ -56,7 +56,7 @@ export default function Header() {
                         marginLeft: 15,
                         marginRight: 5
                     }}>
-                        <Badge badgeContent={2} color="error">
+                        <Badge badgeContent={4} color="error">
                             <Notifications fontSize='large' />
                         </Badge>
                     </IconButton>

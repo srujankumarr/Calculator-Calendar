@@ -19,7 +19,7 @@ export default function SideNavigation() {
                 backgroundColor: '#F9FAFB',
                 height: '100vh',
                 width: 250,
-
+                mt: 5
             }}>
                 <Box
                     sx={{

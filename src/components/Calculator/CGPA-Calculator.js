@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 export default function CGPACalculator() {
     const dispatch = useDispatch()
-    const [cgpa, setCgpa] = useState("");
+    const [cgpa, setCgpa] = useState(null);
     const [displayedCgpa, setDisplayedCgpa] = useState("0.00"); // Newly added state
     const [semIds, setsemIds] = useState([1]);
     const stName = useRef();
@@ -91,6 +91,7 @@ export default function CGPACalculator() {
                     borderRadius: 7,
                     boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
                     marginTop: 14,
+                    ml: 5
                 }}
             >
                 <Typography component="p" sx={{ fontSize: "35px", color: '#212B36', fontFamily: 'Roboto' }}>CGPA Calculator</Typography>
@@ -165,6 +166,8 @@ export default function CGPACalculator() {
                                             margin="normal"
                                             sx={{ margin: 2 }}
                                             size="small"
+                                            type="number"
+                                            inputProps={{ min: 0 }}
                                             InputLabelProps={{
                                                 style: { fontSize: '14px' }
                                             }}
@@ -182,6 +185,7 @@ export default function CGPACalculator() {
                                                 style: { fontSize: '14px' }
                                             }}
                                             required
+                                            inputProps={{ min: 0 }}
                                             type="number"
                                         />
                                         <TextField
@@ -192,6 +196,8 @@ export default function CGPACalculator() {
                                             margin="normal"
                                             sx={{ margin: 2 }}
                                             size="small"
+                                            type="number"
+                                            inputProps={{ step: 0.01, min: 0, max: 10 }}
                                             InputLabelProps={{
                                                 style: { fontSize: '14px' }
                                             }}
@@ -218,21 +224,22 @@ export default function CGPACalculator() {
                     >
                         Calculate CGPA
                     </Button>
-                    <Box mt={2}>
+                    <Box sx={{ padding: 2, pl: 36 }}>
                         {isAnimating ? (
                             <motion.strong
-                                style={{ fontSize: '20px' }}
+                                style={{ fontSize: '22px' }}
                                 initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
+                                animate={{ opacity: 1, x: 0, }}
                             >
                                 Overall CGPA: {displayedCgpa}
                             </motion.strong>
-                        ) : (
-                            <strong style={{ fontSize: '20px' }}> Overall CGPA: {cgpa}</strong>
-                        )}
+                        ) : cgpa !== null && (
+                            <strong style={{ fontSize: '22px', }}> Overall CGPA: {cgpa}</strong>
+                        )
+                        }
                     </Box>
                 </form>
             </Card>
-        </motion.div>
+        </motion.div >
     );
 }
